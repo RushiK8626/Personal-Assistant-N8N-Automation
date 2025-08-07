@@ -1,0 +1,474 @@
+{
+  "name": "Personal Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "sample",
+          "mode": "list",
+          "cachedResultName": "sample"
+        },
+        "options": {
+          "pineconeNamespace": "demo"
+        }
+      },
+      "id": "4fcb2979-deda-4af7-a3b0-cfdd732b9126",
+      "name": "Pinecone Vector Store",
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1,
+      "position": [
+        656,
+        416
+      ],
+      "credentials": {
+        "pineconeApi": {
+          "id": "aVzZQSkQBV6SwkPW",
+          "name": "PineconeApi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "Knowledge_Base",
+        "description": "Call this tool to get information about the company."
+      },
+      "id": "84357285-f0c6-4012-b5fe-fa244afad25c",
+      "name": "Knowledge Base",
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1,
+      "position": [
+        832,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Call this tool to get contact data like email address or phone number",
+        "documentId": {
+          "__rl": true,
+          "value": "1xplCPKL_BgwIlqQejWSGeiBzTuQdKv9Ewq_uTIYnjPA",
+          "mode": "list",
+          "cachedResultName": "Contact Database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xplCPKL_BgwIlqQejWSGeiBzTuQdKv9Ewq_uTIYnjPA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xplCPKL_BgwIlqQejWSGeiBzTuQdKv9Ewq_uTIYnjPA/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "a7fea83e-d929-4a9b-9f4f-d140fccd25b5",
+      "name": "Contacts Data",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        160,
+        240
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "npcvXnESRrWQlBFk",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "f6b3738a-2f81-4fcf-beb7-1c13a2a80e5c",
+      "name": "Respond to Me",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        704,
+        -32
+      ],
+      "webhookId": "a4aad049-cf94-4dc3-9247-402a90c56d97",
+      "credentials": {
+        "telegramApi": {
+          "id": "onosIP918n2G9QbD",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "6770047a-5df2-4c57-9e81-08e814bbe562",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        -32
+      ],
+      "webhookId": "2194a6b2-2302-4406-9c8c-207161b7eb22",
+      "credentials": {
+        "telegramApi": {
+          "id": "onosIP918n2G9QbD",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "a62edbe0-5e37-4cb1-ab4b-e6c788a05dca",
+      "name": "Calculator",
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "=You are a personal assistant AI Agent designed to handle various tasks efficiently. Your primary role is to manage contacts, emails, and calendar events for the user. You have access to three tools to help you fulfill requests:\n\nContacts Data: Use this when you need to look up contact information like an email address, phone number. You need to use this tool BEFORE sending an email or BEFORE getting emails. Also you should use this tool for accessing information requested by user like email, phone, etc. Use this first whenver you require any contact information. If not found then only ask user about it.\n\nEmail Agent: Use this for handling all email-related actions, like sending messages, setting up replies, or forwarding emails or finding / searching emails. Use 'Contact database' for finding contact information.\n\nCalendar Agent: Use this for scheduling, updating, or managing calendar events.\n\nProjects_Agent: Use this tool to access our projects. We can update our projects of get information on our projects.\n\nWhen a task requires using one or more of these tools, make sure to identify which tool is most appropriate, pass along the relevant details, and execute the actions needed to complete the task. Your goal is to be proactive, precise, and organized in managing these resources to provide a smooth experience for the user.\n\nFields in contact database:\n- contact id\n- full name\n- email\n- phone number\n- company\n- tags\n- status\n\nFields in project database(available for project agent)\n- project id\n- project name\n- assigned contact(contact id in contact database)\n- start date\n- due date\n- budget\n- notes\n\nHere is the current time/date: {{ $now.format('DD')}}"
+        }
+      },
+      "id": "f5f621e5-12cc-4122-b7b1-2a8fb758facf",
+      "name": "Personal Assistant",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [
+        384,
+        -32
+      ],
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        208
+      ],
+      "id": "cf0a1cb7-c868-4dee-8a40-8e2b952edac9",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NWN6vgCdwaFenlEf",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        672,
+        592
+      ],
+      "id": "03bd1be5-8f33-4d07-846c-302d09d3892d",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NWN6vgCdwaFenlEf",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        960,
+        416
+      ],
+      "id": "f187cd3f-2ea4-4c09-b351-875a88a93d42",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NWN6vgCdwaFenlEf",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "Research_Agent",
+        "description": "Call this tool to search through Wikipedia, articles, or google to answer the user's question.",
+        "workflowId": {
+          "__rl": true,
+          "value": "FAQzkB6pJZYNbSd9",
+          "mode": "list",
+          "cachedResultName": "Personal Assistant — Research Agent"
+        }
+      },
+      "id": "f882b1b3-449d-4f67-b4d1-5ba6c08e12d7",
+      "name": "Research Agent",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        576,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "name": "Calendar_Agent",
+        "description": "Call this tool to take actions within Calendar",
+        "workflowId": {
+          "__rl": true,
+          "value": "qxR88NcW3YlZlB6R",
+          "mode": "list",
+          "cachedResultName": "Personal Assistant — Calendar Agent"
+        }
+      },
+      "id": "0f0f64b5-0d04-4082-afcc-80e5070403ac",
+      "name": "Calendar Agent",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        432,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "name": "Email_Agent",
+        "description": "Call this tool to take any email actions",
+        "workflowId": {
+          "__rl": true,
+          "value": "zIfYGmRnutmU0Wa1",
+          "mode": "list",
+          "cachedResultName": "Personal Assistant — Email Agent"
+        }
+      },
+      "id": "2f691035-2794-4475-a39b-09e39f715d12",
+      "name": "Email Agent",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        288,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "name": "Projects_Agent",
+        "description": "Call this tool to take action on our projects.",
+        "workflowId": {
+          "__rl": true,
+          "value": "8COCNSWwbQqtMKtG",
+          "mode": "list",
+          "cachedResultName": "Personal Assistant — Projects Agent"
+        }
+      },
+      "id": "bf4dab9a-441c-46b1-a090-8bb7f18ddc00",
+      "name": "Projects Agent",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        704,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Telegram Trigger').item.json.message.from.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        512,
+        416
+      ],
+      "id": "1c39a3b7-36f9-477a-bdb6-9e952388a163",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Pinecone Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Knowledge Base",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Knowledge Base": {
+      "ai_tool": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contacts Data": {
+      "ai_tool": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Personal Assistant": {
+      "main": [
+        [
+          {
+            "node": "Respond to Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Knowledge Base",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Projects Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Personal Assistant",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "29f1c8d5-ead9-4cf1-8611-1c7bfccfc6b8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4197b8ab284088e9e68f5fa9afd39208bcb49524f3830fd43109b4024cadb27e"
+  },
+  "id": "dPYani6iBMeHfOsv",
+  "tags": []
+}

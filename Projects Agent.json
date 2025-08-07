@@ -1,0 +1,342 @@
+{
+  "name": "Projects Agent",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "0646db2a-18ac-4fba-b38f-9e4abdce323c",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "126E8rOuwpH-cRBMLeiuM004WwCXo232dyTvnb-vcgbA",
+          "mode": "list",
+          "cachedResultName": "Projects",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/126E8rOuwpH-cRBMLeiuM004WwCXo232dyTvnb-vcgbA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/126E8rOuwpH-cRBMLeiuM004WwCXo232dyTvnb-vcgbA/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "582f1f6d-3f0d-4bb1-9a17-aa6e468683c7",
+      "name": "Get Projects",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        -192,
+        608
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "npcvXnESRrWQlBFk",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "126E8rOuwpH-cRBMLeiuM004WwCXo232dyTvnb-vcgbA",
+          "mode": "list",
+          "cachedResultName": "Projects",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/126E8rOuwpH-cRBMLeiuM004WwCXo232dyTvnb-vcgbA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/126E8rOuwpH-cRBMLeiuM004WwCXo232dyTvnb-vcgbA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Project ID",
+              "displayName": "Project ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project Name",
+              "displayName": "Project Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Assigned Contact ID",
+              "displayName": "Assigned Contact ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Start Date",
+              "displayName": "Start Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Due Date",
+              "displayName": "Due Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "1ebc766e-cffb-48ba-ae06-0c8002bf31c7",
+      "name": "Update Projects",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        -32,
+        608
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "npcvXnESRrWQlBFk",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7ab380a2-a8d3-421c-ab4e-748ea8fb7904",
+              "name": "response",
+              "value": "Unable to perform task. Please try again.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5f9cf59d-a8d6-44c5-a900-e3977a3a5cec",
+      "name": "Try Again",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "39c2f302-03be-4464-a17a-d7cc481d6d44",
+              "name": "=response",
+              "value": "={{$json.output}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d06fed24-88f5-4999-a8c7-2b67941cb786",
+      "name": "Success",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{$json.query}}",
+        "options": {
+          "systemMessage": "=You are a google sheets agent. Your job is to take the user query and decide which tool to use to get the job done. \n\nYour tools:\nAdd Contact\nUse this tool to add a contact to the contact database\n\nUpdate Contact\nUse this tool to update a row for a specific contact. The fields for a contact are Name, Email, and Phone Number. If not all of these are specified to update, then keep them as they are. Example, if we want to update Rushikesh Kadepurkar's email, pass along the updated email, but keep the current Name and Phone Number the same. \n\nGet Projects\nUse this tool to get project information like \n- project id\n- project name\n- assigned contact\n- start date\n- due date\n- status\n- budget\n- notes\n\nUpdate Projects\nUse this tool to update a row for a specific contact. The fields for a contact are Project, Notes, and Status. If not all of these are specified to update, then keep them as they are. "
+        }
+      },
+      "id": "c3493c7a-3e07-403c-bd09-8c45e022bf78",
+      "name": "Projects Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [
+        -208,
+        384
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        608
+      ],
+      "id": "0b6fa05e-f7bc-4430-8209-7e997b345ed3",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NWN6vgCdwaFenlEf",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Execute Workflow Trigger": [
+      {
+        "json": {
+          "query": "budget of data migration project"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Projects Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Projects": {
+      "ai_tool": [
+        [
+          {
+            "node": "Projects Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Projects": {
+      "ai_tool": [
+        [
+          {
+            "node": "Projects Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Projects Agent": {
+      "main": [
+        [
+          {
+            "node": "Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Try Again",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Projects Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c91370a2-dc8b-4cab-86dd-79fcb5d741b0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4197b8ab284088e9e68f5fa9afd39208bcb49524f3830fd43109b4024cadb27e"
+  },
+  "id": "8COCNSWwbQqtMKtG",
+  "tags": []
+}

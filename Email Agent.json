@@ -1,0 +1,235 @@
+{
+  "name": "Email Agent",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1c55e0a7-b3d3-45f4-b546-dbfb448dafb8",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1040,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7ab380a2-a8d3-421c-ab4e-748ea8fb7904",
+              "name": "response",
+              "value": "Unable to perform task. Please try again.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9aac61bf-fc91-43a2-bb31-63446a497d43",
+      "name": "Try Again",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -288,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', `the email of a contact`, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', `the subject for the email`, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', `the body message of the email`, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "6e739146-11c6-40cf-9d66-faaafeed6291",
+      "name": "Send Email",
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -704,
+        416
+      ],
+      "webhookId": "27bd5c69-d6de-46aa-b388-a312d220ff27",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "tmyMGBBMUEzWpkYH",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}",
+        "filters": {
+          "sender": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Sender', `who the user is asking for emails from`, 'string') }}"
+        },
+        "options": {}
+      },
+      "id": "6a8956ec-a8e6-4a83-8490-3c29c03ec151",
+      "name": "Get Messages",
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -560,
+        416
+      ],
+      "webhookId": "4a8bc2e4-e027-4618-ac7d-8ebbb6ee986b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "tmyMGBBMUEzWpkYH",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "39c2f302-03be-4464-a17a-d7cc481d6d44",
+              "name": "=response",
+              "value": "={{$json.output}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d478a92f-c31c-4d26-8603-21be2a5b5d6e",
+      "name": "Success",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -288,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{$json.query}}",
+        "options": {
+          "systemMessage": "You are a helpful assistant. \n\nIf a number of emails isn't specified, just assume it will be 5.\n\nWhen sending an email, always sign it off from Rushikesh, never include something like [Your Name]\n\nWhen user asks about mail from specific sender you should summarize it such way that user will get complete idea what mail(s) was.  "
+        }
+      },
+      "id": "ca4c0b7e-6b4f-4b8b-86fd-98284b4ed878",
+      "name": "Email Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [
+        -816,
+        144
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -864,
+        416
+      ],
+      "id": "0f15ac50-a35f-4622-b480-2d7959ae1ca9",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NWN6vgCdwaFenlEf",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Execute Workflow Trigger": [
+      {
+        "json": {
+          "query": "What was last email recieved by hello@info.n8n.io"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Messages": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Agent": {
+      "main": [
+        [
+          {
+            "node": "Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Try Again",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ce401b89-8fca-4f26-bbae-3f56f3b94f0f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4197b8ab284088e9e68f5fa9afd39208bcb49524f3830fd43109b4024cadb27e"
+  },
+  "id": "zIfYGmRnutmU0Wa1",
+  "tags": []
+}

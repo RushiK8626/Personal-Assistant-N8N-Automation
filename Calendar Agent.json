@@ -1,0 +1,288 @@
+{
+  "name": "Calendar Agent",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "2a9f5d55-3f7b-4724-aa68-b5fc3f5f0c3d",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        -816,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7ab380a2-a8d3-421c-ab4e-748ea8fb7904",
+              "name": "response",
+              "value": "Unable to perform task. Please try again.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9eed4975-a6aa-4f4b-b212-97d780c79249",
+      "name": "Try Again",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "39c2f302-03be-4464-a17a-d7cc481d6d44",
+              "name": "=response",
+              "value": "={{$json.output}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "447e1e07-61fb-41c9-8ec0-e0de26ce6367",
+      "name": "Success",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        -112
+      ]
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "rushikeshkadepurkar@gmail.com",
+          "mode": "list",
+          "cachedResultName": "rushikeshkadepurkar@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', `the time the user asks for the event to start`, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', `the time the user asks for the event to end`, 'string') }}",
+        "useDefaultReminders": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Use_Default_Reminders', ``, 'boolean') }}",
+        "additionalFields": {
+          "attendees": [],
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', `the name of the calendar event`, 'string') }}"
+        }
+      },
+      "id": "7484a77a-643c-46bc-845f-15f8b5e909e2",
+      "name": "Create Event",
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.1,
+      "position": [
+        -416,
+        256
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "ODTV0t3HXLtqcoT0",
+          "name": "Google Calendar account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "rushikeshkadepurkar@gmail.com",
+          "mode": "list",
+          "cachedResultName": "rushikeshkadepurkar@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', `the time the user asks for the event to start`, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', `the time the user asks for the event to end`, 'string') }}",
+        "useDefaultReminders": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Use_Default_Reminders', ``, 'boolean') }}",
+        "additionalFields": {
+          "attendees": [
+            "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('attendees0_Attendees', `the email of the user asks the event to be sceduled with`, 'string') }}"
+          ],
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', `the name of the calendar event`, 'string') }}"
+        }
+      },
+      "id": "260e1926-27fe-4a13-979f-ae8725a11f10",
+      "name": "Create Event with Attendee",
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.1,
+      "position": [
+        -288,
+        256
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "ODTV0t3HXLtqcoT0",
+          "name": "Google Calendar account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "rushikeshkadepurkar@gmail.com",
+          "mode": "list",
+          "cachedResultName": "rushikeshkadepurkar@gmail.com"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "options": {
+          "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', `one day before the day that the user requested`, 'string') }}",
+          "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', `one day after the day that the user requested`, 'string') }}"
+        }
+      },
+      "id": "3c0a69fe-39a2-4466-926e-c683bcf9c5e4",
+      "name": "Get Events",
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.1,
+      "position": [
+        -560,
+        256
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "ODTV0t3HXLtqcoT0",
+          "name": "Google Calendar account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "=You are a calendar assistant. You have access to multiple tools to take any action within calendar. Here is the current date/time: {{ $now }}\n\nCreate Event:\nIf an end date isn't specified for the event, assume it will be 60 minutes long. Use this tool if there is no attendee specified.\n\nCreate Event with Attendee:\nIf an end date isn't specified for the event, assume it will be 60 minutes long. Use this tool WHEN AN ATTENDEE IS SPECIFIED.\n\nGet Events:\nUse this tool to get events from a certain day and summarize them. "
+        }
+      },
+      "id": "d4b9e656-68cc-4d5b-8333-11fcf82cab58",
+      "name": "Calendar Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [
+        -608,
+        32
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -704,
+        256
+      ],
+      "id": "90401a8b-402f-4eef-a594-3f634f89c4a3",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NWN6vgCdwaFenlEf",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Execute Workflow Trigger": [
+      {
+        "json": {
+          "query": "Schedule meeting with Rushikesh Kadepurkar (rushikeshk2005@gmail.com) Tommorow 7-8 pm"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Calendar Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Event": {
+      "ai_tool": [
+        [
+          {
+            "node": "Calendar Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Event with Attendee": {
+      "ai_tool": [
+        [
+          {
+            "node": "Calendar Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Events": {
+      "ai_tool": [
+        [
+          {
+            "node": "Calendar Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar Agent": {
+      "main": [
+        [
+          {
+            "node": "Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Try Again",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Calendar Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4ae85347-56ac-43ba-ba1c-1e5f3aaf43db",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4197b8ab284088e9e68f5fa9afd39208bcb49524f3830fd43109b4024cadb27e"
+  },
+  "id": "qxR88NcW3YlZlB6R",
+  "tags": []
+}
